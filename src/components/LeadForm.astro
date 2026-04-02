@@ -150,23 +150,22 @@
                 if (btnSpinner) btnSpinner.classList.remove('hidden');
 
                 const formData = new FormData(form);
-                const lastName = formData.get('lastName') as string;
-                const firstName = formData.get('firstName') as string;
-                const email = formData.get('email') as string;
-                const company = formData.get('company') as string;
-                const message = formData.get('message') as string;
+                const lastName = (formData.get('lastName') as string).trim();
+                const firstName = (formData.get('firstName') as string).trim();
+                const email = (formData.get('email') as string).trim();
+                const company = (formData.get('company') as string).trim();
+                const message = (formData.get('message') as string).trim();
 
-                // Simple parsing for company/url
+                // Differentiate between company name and website URL
                 let companyName = company;
                 let websiteUrl = '';
-                if (company && (company.includes('http') || company.includes('www.') || company.includes('.com') || company.includes('.tw'))) {
-                    // It looks like a URL
-                    if (!company.startsWith('http')) {
-                        websiteUrl = 'https://' + company;
-                    } else {
-                        websiteUrl = company;
-                    }
-                    companyName = ''; // Could keep it, but let's assume it's just a URL if it matches
+                
+                // Basic heuristic: if it has no spaces and contains a dot or starts with http, it's likely a URL
+                const isLikelyUrl = company && !company.includes(' ') && (company.includes('.') || company.startsWith('http'));
+                
+                if (isLikelyUrl) {
+                    websiteUrl = company.startsWith('http') ? company : `https://${company}`;
+                    companyName = '';
                 }
 
                 try {
@@ -176,7 +175,7 @@
                             'Content-Type': 'application/json',
                         },
                         body: JSON.stringify({
-                            name: `${lastName}${firstName}`.trim(),
+                            name: `${lastName}${firstName}`,
                             email,
                             companyName: companyName || undefined,
                             websiteUrl: websiteUrl || undefined,
