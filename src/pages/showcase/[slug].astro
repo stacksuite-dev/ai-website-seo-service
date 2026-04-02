@@ -1,0 +1,199 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import LeadForm from '../../components/LeadForm.astro';
+
+export async function getStaticPaths() {
+  const showcaseEntries = await getCollection('showcase');
+  return showcaseEntries.map(entry => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+
+// Fetch the detailed generated HTML for this specific showcase
+const res = await fetch(`https://api.stacksuite.dev/v1/web-builder/gallery/${entry.id}`);
+const detailData = await res.json();
+const generatedHtml = detailData?.data?.generatedHtml || '';
+---
+
+<Layout title={`${entry.data.title} | AI SEO 專家案例`}>
+    <Navigation />
+    
+    <main class="pt-32 pb-16 bg-slate-50 min-h-screen">
+        <article class="max-w-7xl mx-auto px-6 lg:px-8">
+            <header class="mb-12 text-center max-w-4xl mx-auto">
+                <div class="mb-4 flex flex-wrap justify-center gap-2">
+                    <span class="px-3 py-1 bg-white text-slate-700 text-xs font-medium rounded-full border border-slate-200 shadow-sm">
+                        {entry.data.industry}
+                    </span>
+                    <span class="px-3 py-1 bg-brand-100 text-brand-700 text-xs font-medium rounded-full shadow-sm uppercase">
+                        {entry.data.style}
+                    </span>
+                </div>
+                <h1 class="text-4xl md:text-5xl font-display font-bold text-slate-900 mb-6 leading-tight">
+                    {entry.data.title}
+                </h1>
+                <p class="text-xl text-slate-600 font-light leading-relaxed max-w-3xl mx-auto">
+                    {entry.data.description}
+                </p>
+            </header>
+
+            <div class="grid lg:grid-cols-3 gap-8 items-start">
+                
+                <!-- Interactive Preview Area -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-200 overflow-hidden flex flex-col">
+                        <!-- Browser Chrome -->
+                        <div class="bg-slate-100 border-b border-slate-200 px-4 py-3 flex items-center gap-4 relative">
+                            <div class="flex gap-2">
+                                <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                                <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-400"></div>
+                            </div>
+                            <div class="flex-1 mx-4 hidden md:block">
+                                <div class="bg-white rounded-md text-center py-1.5 text-xs text-slate-500 font-mono border border-slate-200 shadow-sm truncate">
+                                    {(entry.data.companyName || 'demo').toLowerCase().replace(/\s+/g, '')}.com.hk
+                                </div>
+                            </div>
+                            <div class="flex gap-1 bg-white p-1 rounded-lg border border-slate-200 shadow-sm ml-auto">
+                                <button class="device-btn active p-1.5 rounded-md hover:bg-slate-50 text-brand-600 transition-colors" data-device="desktop" title="Desktop">
+                                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25A2.25 2.25 0 015.25 3h13.5A2.25 2.25 0 0121 5.25z" />
+                                    </svg>
+                                </button>
+                                <button class="device-btn p-1.5 rounded-md hover:bg-slate-50 text-slate-400 hover:text-slate-600 transition-colors" data-device="tablet" title="Tablet">
+                                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5h3m-6.75 2.25h10.5a2.25 2.25 0 002.25-2.25v-15a2.25 2.25 0 00-2.25-2.25H6.75A2.25 2.25 0 004.5 4.5v15a2.25 2.25 0 002.25 2.25z" />
+                                    </svg>
+                                </button>
+                                <button class="device-btn p-1.5 rounded-md hover:bg-slate-50 text-slate-400 hover:text-slate-600 transition-colors" data-device="mobile" title="Mobile">
+                                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Iframe Container -->
+                        <div class="relative bg-slate-200 w-full flex justify-center overflow-hidden h-[600px] md:h-[800px] p-0 transition-all duration-300" id="preview-container">
+                            {generatedHtml ? (
+                                <iframe 
+                                    srcdoc={generatedHtml} 
+                                    class="w-full h-full border-none bg-white shadow-2xl transition-all duration-500"
+                                    id="preview-iframe"
+                                    title={`${entry.data.title} Website Preview`}
+                                ></iframe>
+                            ) : (
+                                <div class="flex items-center justify-center h-full w-full bg-white text-slate-400 flex-col gap-4">
+                                    <svg class="w-12 h-12 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                    </svg>
+                                    <p>無法載入預覽畫面</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Info Sidebar -->
+                <div class="lg:col-span-1 space-y-6">
+                    <div class="bg-white p-8 rounded-2xl shadow-lg shadow-slate-200/50 border border-slate-200">
+                        <h3 class="text-xl font-bold text-slate-900 mb-6 font-display border-b border-slate-100 pb-4">專案資訊</h3>
+                        
+                        <dl class="space-y-4 text-sm">
+                            <div class="flex flex-col gap-1">
+                                <dt class="text-slate-500">客戶名稱</dt>
+                                <dd class="font-medium text-slate-900">{entry.data.companyName}</dd>
+                            </div>
+                            
+                            <div class="flex flex-col gap-1">
+                                <dt class="text-slate-500">產業類型</dt>
+                                <dd class="font-medium text-slate-900">{entry.data.industry}</dd>
+                            </div>
+
+                            <div class="flex flex-col gap-1">
+                                <dt class="text-slate-500">設計風格</dt>
+                                <dd class="font-medium text-slate-900 capitalize">{entry.data.style}</dd>
+                            </div>
+
+                            <div class="flex flex-col gap-1">
+                                <dt class="text-slate-500">技術規格</dt>
+                                <dd class="font-medium text-slate-900">
+                                    <ul class="list-disc list-inside ml-4 mt-1 space-y-1 text-slate-700">
+                                        <li>100% 響應式設計 (RWD)</li>
+                                        <li>AI 驅動 SEO 架構</li>
+                                        <li>極速載入優化</li>
+                                    </ul>
+                                </dd>
+                            </div>
+                        </dl>
+
+                        <div class="mt-8 pt-6 border-t border-slate-100">
+                            <a href="#contact" class="w-full flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-brand-600 hover:bg-brand-700 transition-colors shadow-md shadow-brand-500/20">
+                                打造您的專屬網站
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+        </article>
+    </main>
+
+    <div class="max-w-4xl mx-auto px-6 lg:px-8 mb-32">
+        <div class="border-t border-slate-200 pt-8 mt-16 text-center">
+            <a href="/showcase" class="text-brand-600 hover:text-brand-700 font-medium inline-flex items-center bg-white px-6 py-2 rounded-full shadow-sm border border-slate-200 hover:shadow-md transition-all">
+                <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                返回所有案例
+            </a>
+        </div>
+    </div>
+    
+    <LeadForm />
+</Layout>
+
+<script>
+    // Handle device toggle functionality
+    document.addEventListener('DOMContentLoaded', () => {
+        const btns = document.querySelectorAll('.device-btn');
+        const container = document.getElementById('preview-container');
+        const iframe = document.getElementById('preview-iframe');
+
+        if (!container || !iframe || btns.length === 0) return;
+
+        btns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const device = btn.getAttribute('data-device');
+                
+                // Update active states
+                btns.forEach(b => {
+                    b.classList.remove('text-brand-600', 'bg-brand-50');
+                    b.classList.add('text-slate-400', 'hover:text-slate-600', 'hover:bg-slate-50');
+                });
+                
+                btn.classList.add('text-brand-600', 'bg-brand-50');
+                btn.classList.remove('text-slate-400', 'hover:text-slate-600', 'hover:bg-slate-50');
+                
+                // Update iframe width
+                if (device === 'desktop') {
+                    iframe.style.width = '100%';
+                    iframe.style.borderRadius = '0px';
+                    container.classList.remove('py-8');
+                } else if (device === 'tablet') {
+                    iframe.style.width = '768px';
+                    iframe.style.borderRadius = '16px';
+                    container.classList.add('py-8');
+                } else if (device === 'mobile') {
+                    iframe.style.width = '375px';
+                    iframe.style.borderRadius = '24px';
+                    container.classList.add('py-8');
+                }
+            });
+        });
+    });
+</script>

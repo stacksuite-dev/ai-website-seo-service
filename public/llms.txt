@@ -1,0 +1,23 @@
+# AI SEO 專家 (AI SEO Expert)
+
+AI SEO 專家 (https://aiseo.hk) provides an automated B2B enterprise SEO marketing engine driven by AI technology. 
+
+## Value Proposition
+Businesses can upload corporate documents or presentations, and the AI engine will generate a high-conversion SEO-friendly website within days. It combines real-time performance tracking with AI competitive strategy analysis to comprehensively enhance digital presence and create passive traffic streams.
+
+## Features
+1. Data Ingestion: Upload docs, AI extracts core brand value.
+2. AI Analysis: NLP identifies target audience search intent and market gaps.
+3. Generation: Automated sitemap and high-quality SEO content creation.
+4. Monitoring: Machine learning tracks site health and rankings.
+5. Technical SEO: Automated optimization of page speed, Schema, and Core Web Vitals.
+6. Content Generation: Regular production of E-E-A-T authoritative long-tail keyword articles.
+7. Link Building: Digital PR and external link strategy to boost Domain Authority.
+8. Conversion: Form and CRM integration to turn traffic into high-quality leads.
+
+## Pricing (HKD per year)
+- Basic Plan (HK$3,800): For startups/local businesses. Basic keywords, 2 articles/mo, quarterly reports.
+- Pro Plan (HK$9,800): For B2B SMEs (Most Popular). Deep keyword insights, 8 E-E-A-T articles/mo, monthly reports, basic link building.
+- Enterprise Plan (HK$48,000): For large corporations. Unlimited content, multi-language, advanced PR, dedicated account manager, API integration.
+
+Contact: Connect via the website form at https://aiseo.hk/#contact to book a free consultation and website health check.

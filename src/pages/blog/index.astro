@@ -1,0 +1,64 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import LeadForm from '../../components/LeadForm.astro';
+
+const posts = await getCollection('blog');
+posts.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
+---
+
+<Layout title="SEO 行銷洞察與趨勢 | AI SEO 專家">
+    <Navigation />
+    
+    <main class="pt-32 pb-16 bg-slate-50 min-h-screen">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <header class="mb-16 text-center max-w-3xl mx-auto">
+                <h1 class="text-4xl md:text-5xl font-display font-bold text-slate-900 mb-6 leading-tight">
+                    SEO 行銷洞察與趨勢
+                </h1>
+                <p class="text-lg text-slate-600 font-light leading-relaxed">
+                    掌握最新 AI 行銷科技與 B2B SEO 實戰策略，打造企業被動流量池。
+                </p>
+            </header>
+
+            <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3 mb-20">
+                {posts.map(post => (
+                    <a href={`/blog/${post.id}`} class="glass-card rounded-2xl overflow-hidden group hover:-translate-y-1 transition-all duration-300 bg-white flex flex-col">
+                        {post.data.image && (
+                            <div class="aspect-video w-full overflow-hidden">
+                                <img 
+                                    src={post.data.image} 
+                                    alt={post.data.title}
+                                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                />
+                            </div>
+                        )}
+                        <div class="p-6 flex-1 flex flex-col">
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                {post.data.tags.map((tag: string) => (
+                                    <span class="px-2.5 py-0.5 bg-slate-100 text-slate-600 text-xs font-medium rounded-full">
+                                        {tag}
+                                    </span>
+                                ))}
+                            </div>
+                            <h2 class="text-xl font-bold text-slate-900 mb-3 line-clamp-2 group-hover:text-brand-600 transition-colors">
+                                {post.data.title}
+                            </h2>
+                            <p class="text-slate-600 text-sm line-clamp-3 mb-6 font-light flex-1">
+                                {post.data.description}
+                            </p>
+                            <div class="text-xs text-slate-400 flex items-center justify-between mt-auto">
+                                <span>{post.data.publishDate.toLocaleDateString('zh-HK')}</span>
+                                <span class="text-brand-600 font-medium group-hover:translate-x-1 transition-transform">閱讀更多 →</span>
+                            </div>
+                        </div>
+                    </a>
+                ))}
+            </div>
+            
+        </div>
+    </main>
+    
+    <LeadForm />
+</Layout>

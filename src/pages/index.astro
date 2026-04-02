@@ -1,0 +1,35 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import Hero from '../components/Hero.astro';
+import Process from '../components/Process.astro';
+import Showcase from '../components/Showcase.astro';
+import Pricing from '../components/Pricing.astro';
+import LeadForm from '../components/LeadForm.astro';
+
+const organizationSchema = {
+	"@context": "https://schema.org",
+	"@type": "Organization",
+	"name": "AI SEO 專家",
+	"url": "https://aiseo.hk",
+	"logo": "https://aiseo.hk/favicon.svg",
+	"description": "以 AI 驅動的 B2B 企業自動化 SEO 行銷引擎。上傳文件，數天內為您部署高轉換率網站與優化長尾關鍵字，建立源源不絕的被動流量池。",
+	"sameAs": [
+		"https://www.linkedin.com/company/aiseo-hk",
+		"https://www.facebook.com/aiseo.hk"
+	]
+};
+---
+
+<Layout title="AI SEO 專家 | B2B 企業自動化行銷引擎">
+	<Navigation />
+	<main>
+		<!-- Inject JSON-LD Schema -->
+		<script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
+		<Hero />
+		<Process />
+		<Showcase />
+		<Pricing />
+		<LeadForm />
+	</main>
+</Layout>

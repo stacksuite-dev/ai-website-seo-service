@@ -1,0 +1,69 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import LeadForm from '../../components/LeadForm.astro';
+
+export async function getStaticPaths() {
+  const blogEntries = await getCollection('blog');
+  return blogEntries.map(entry => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<Layout title={`${entry.data.title} | AI SEO 專家部落格`}>
+    <Navigation />
+    
+    <main class="pt-32 pb-16">
+        <article class="max-w-3xl mx-auto px-6 lg:px-8">
+            <header class="mb-12 text-center">
+                <div class="mb-4 flex flex-wrap justify-center gap-2">
+                    {entry.data.tags.map((tag: string) => (
+                        <span class="px-3 py-1 bg-brand-50 text-brand-700 text-xs font-medium rounded-full">
+                            {tag}
+                        </span>
+                    ))}
+                </div>
+                <h1 class="text-4xl md:text-5xl font-display font-bold text-slate-900 mb-6 leading-tight">
+                    {entry.data.title}
+                </h1>
+                <div class="flex items-center justify-center text-sm text-slate-500 gap-4">
+                    <span>發布於 {entry.data.publishDate.toLocaleDateString('zh-HK')}</span>
+                    <span>•</span>
+                    <span>作者：{entry.data.author}</span>
+                </div>
+            </header>
+            
+            {entry.data.image && (
+                <div class="mb-16 rounded-3xl overflow-hidden shadow-xl shadow-slate-200/50">
+                    <img 
+                        src={entry.data.image} 
+                        alt={entry.data.title}
+                        class="w-full h-auto max-h-[500px] object-cover"
+                    />
+                </div>
+            )}
+            
+            <div class="prose prose-lg prose-slate max-w-none prose-headings:font-display prose-headings:font-bold prose-a:text-brand-600 hover:prose-a:text-brand-500">
+                <Content />
+            </div>
+            
+        </article>
+    </main>
+
+    <div class="max-w-3xl mx-auto px-6 lg:px-8 mb-32">
+        <div class="border-t border-slate-200 pt-8 mt-16 text-center">
+            <a href="/blog" class="text-brand-600 hover:text-brand-700 font-medium inline-flex items-center">
+                <svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                返回部落格
+            </a>
+        </div>
+    </div>
+    
+    <LeadForm />
+</Layout>

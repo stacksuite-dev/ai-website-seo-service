@@ -1,0 +1,84 @@
+---
+import { getCollection } from 'astro:content';
+
+const showcases = await getCollection('showcase');
+const featuredShowcases = showcases.slice(0, 4); // Show top 4
+---
+
+<section id="showcase" class="py-32 relative bg-slate-50 border-t border-slate-200 overflow-hidden">
+    <!-- Decorative background elements -->
+    <div class="absolute inset-0 z-0">
+        <div class="absolute -top-24 -left-24 w-96 h-96 rounded-full bg-brand-100 blur-3xl opacity-50 mix-blend-multiply pointer-events-none"></div>
+        <div class="absolute -bottom-24 -right-24 w-96 h-96 rounded-full bg-blue-100 blur-3xl opacity-50 mix-blend-multiply pointer-events-none"></div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+        <div class="text-center max-w-3xl mx-auto mb-20">
+            <h2 class="font-display text-4xl sm:text-5xl font-bold text-slate-900 mb-6">實戰成功案例</h2>
+            <p class="text-lg text-slate-600 font-light">見證 AI 驅動的 SEO 引擎如何翻轉 B2B 企業營收，創造被動流量池。</p>
+        </div>
+
+        <!-- Bento Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[300px]">
+            {featuredShowcases.map((showcase, index) => {
+                // Large item spans 2 cols, others span 1. Just a basic bento pattern.
+                const isLarge = index === 0;
+                
+                return (
+                    <a 
+                        href={`/showcase/${showcase.id}`}
+                        class={`group block relative rounded-3xl overflow-hidden glass-card transition-all duration-500 hover:shadow-2xl hover:shadow-brand-500/10 hover:-translate-y-1 ${isLarge ? 'md:col-span-2' : 'md:col-span-1'}`}
+                    >
+                        <!-- Background Image -->
+                        <div class="absolute inset-0 overflow-hidden bg-slate-100">
+                            {showcase.data.screenshotUrl && (
+                                <img 
+                                    src={showcase.data.screenshotUrl} 
+                                    alt={showcase.data.title}
+                                    class="w-full h-full object-cover object-top transition-transform duration-1000 group-hover:scale-105"
+                                />
+                            )}
+                        </div>
+                        
+                        <!-- Smooth text protection gradient -->
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/50 to-transparent"></div>
+
+                        <!-- Content -->
+                        <div class="absolute inset-0 p-8 flex flex-col justify-end">
+                            <div class="mb-4 flex flex-wrap gap-2">
+                                <span class="px-3 py-1 bg-white/20 backdrop-blur-md border border-white/30 text-white text-xs font-medium rounded-full">
+                                    {showcase.data.industry}
+                                </span>
+                                <span class="px-3 py-1 bg-brand-500/80 backdrop-blur-md text-white text-xs font-medium rounded-full uppercase">
+                                    {showcase.data.style}
+                                </span>
+                            </div>
+                            <h3 class={`font-display font-bold text-white mb-2 ${isLarge ? 'text-3xl' : 'text-xl'}`}>
+                                {showcase.data.title}
+                            </h3>
+                            <p class="text-slate-200 text-sm line-clamp-2 font-light">
+                                {showcase.data.description}
+                            </p>
+                            
+                            <div class="mt-6 flex items-center text-white text-sm font-bold group-hover:text-brand-300 transition-colors">
+                                閱讀完整案例 <span class="ml-2 transform group-hover:translate-x-1 transition-transform">→</span>
+                            </div>
+                        </div>
+                    </a>
+                )
+            })}
+        </div>
+        
+        {featuredShowcases.length === 0 && (
+            <div class="text-center py-20 bg-white/50 backdrop-blur-sm rounded-3xl border border-slate-200">
+                <p class="text-slate-500">更多案例即將推出，敬請期待。</p>
+            </div>
+        )}
+        
+        <div class="mt-16 text-center">
+            <a href="/showcase" class="inline-flex items-center justify-center px-8 py-3.5 text-base font-medium text-slate-700 bg-white border border-slate-200 rounded-full hover:bg-slate-50 hover:text-brand-600 transition-colors shadow-sm">
+                瀏覽所有案例
+            </a>
+        </div>
+    </div>
+</section>
