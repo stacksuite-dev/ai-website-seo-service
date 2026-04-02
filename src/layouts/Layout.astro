@@ -2,14 +2,6 @@
 import Footer from '../components/Footer.astro';
 import '../styles/global.css';
 
-import '@fontsource/noto-sans-tc/300.css';
-import '@fontsource/noto-sans-tc/400.css';
-import '@fontsource/noto-sans-tc/500.css';
-import '@fontsource/noto-sans-tc/700.css';
-import '@fontsource/noto-serif-tc/400.css';
-import '@fontsource/noto-serif-tc/600.css';
-import '@fontsource/noto-serif-tc/900.css';
-
 interface Props {
 	title: string;
 	description?: string;
@@ -54,6 +46,10 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site || Astro.url).href;
 		<meta property="twitter:image" content={new URL(image, Astro.url)} />
 
 		<title>{title}</title>
+		<!-- Preconnect to Google Fonts for performance -->
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
 	</head>
 	<body class="bg-slate-50 text-slate-600 antialiased overflow-x-hidden selection:bg-brand-500 selection:text-white">
 		<div class="fixed top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
