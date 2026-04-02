@@ -9,6 +9,12 @@ import sitemap from '@astrojs/sitemap';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://aiseo.hk',
+  build: {
+    inlineStylesheets: 'always'
+  },
+  image: {
+    domains: ['assets.stacksuite.dev']
+  },
   vite: {
     plugins: [tailwindcss()]
   },

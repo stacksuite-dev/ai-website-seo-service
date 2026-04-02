@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 
 const showcases = await getCollection('showcase');
 const featuredShowcases = showcases.slice(0, 4); // Show top 4
@@ -32,9 +33,10 @@ const featuredShowcases = showcases.slice(0, 4); // Show top 4
                         <!-- Background Image -->
                         <div class="absolute inset-0 overflow-hidden bg-slate-100">
                             {showcase.data.screenshotUrl && (
-                                <img 
+                                <Image 
                                     src={showcase.data.screenshotUrl} 
                                     alt={showcase.data.title}
+                                    inferSize={true}
                                     class="w-full h-full object-cover object-top transition-transform duration-1000 group-hover:scale-105"
                                 />
                             )}
